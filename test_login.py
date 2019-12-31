@@ -8,5 +8,7 @@ def main():
     driver.get(url)
     assert url in driver.current_url
 
+    driver.close()
+
 if __name__ == '__main__':
     main()
