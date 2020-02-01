@@ -1,4 +1,4 @@
-
+import time
 
 def test_login(app):
     # 1) входит в панель администратора http://localhost/litecart/admin
@@ -65,19 +65,26 @@ def test_login(app):
 
 
 def test_check_sticker(app):
+    '''Сделайте сценарий, проверяющий наличие стикеров у всех товаров в учебном приложении litecart на главной странице.
+     Стикеры -- это полоски в левом верхнем углу изображения товара, на которых написано 
+     New или Sale или что-нибудь другое. Сценарий должен проверять, что у каждого товара имеется ровно один стикер.'''
     # открыть главную страницу
     app.session.open_home_page()
 
+    box = app.driver.find_element_by_css_selector('#box-most-popular')
+    elems = box.find_elements_by_tag_name('li')
+    for elem in elems:
+        sticker = elem.find_element_by_class_name('image-wrapper').find_elements_by_class_name('sticker')
+        assert (len(sticker)) == 1
 
+    box = app.driver.find_element_by_css_selector('#box-campaigns')
+    elems = box.find_elements_by_tag_name('li')
+    for elem in elems:
+        sticker = elem.find_element_by_class_name('image-wrapper').find_elements_by_class_name('sticker')
+        assert (len(sticker)) == 1
 
-
-
-
-
-
-
-
-
-
-
-    # 3) для каждой страницы проверяет наличие заголовка (то есть элемента с тегом h1)
+    box = app.driver.find_element_by_css_selector('#box-latest-products')
+    elems = box.find_elements_by_tag_name('li')
+    for elem in elems:
+        sticker = elem.find_element_by_class_name('image-wrapper').find_elements_by_class_name('sticker')
+        assert (len(sticker)) == 1
