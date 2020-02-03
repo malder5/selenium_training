@@ -8,6 +8,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 # Helpers
 from fixture.session import SessionHelper
+from fixture.page import PageHelper
+from fixture.geo_zones import GeoZonesHelper
 
 class Application():
     def __init__(self, browser='chrome'):
@@ -32,6 +34,9 @@ class Application():
             raise ValueError('Неизвестный браузер {}'.format(browser))
         # Helpers
         self.session = SessionHelper(self)
+        self.page = PageHelper(self)
+        self.geozones = GeoZonesHelper(self)
+
 
 
     def is_valid(self):
