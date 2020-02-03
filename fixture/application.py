@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from fixture.session import SessionHelper
 from fixture.page import PageHelper
 from fixture.geo_zones import GeoZonesHelper
+from fixture.countries import CoutriesHelper
 
 class Application():
     def __init__(self, browser='chrome'):
@@ -36,8 +37,7 @@ class Application():
         self.session = SessionHelper(self)
         self.page = PageHelper(self)
         self.geozones = GeoZonesHelper(self)
-
-
+        self.countries = CoutriesHelper(self)
 
     def is_valid(self):
         try:
