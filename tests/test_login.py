@@ -7,18 +7,7 @@ def test_login(app):
 
 
     # 1) входит в панель администратора http://localhost/litecart/admin
-    app.session.open_login_page()
-
-    driver = app.driver
-    username = driver.find_elements_by_name('username')
-    assert len(username)==1
-    password = driver.find_elements_by_name('password')
-    assert len(password)==1
-
-    username[0].send_keys('admin')
-    password[0].send_keys('admin')
-
-    driver.find_element_by_name('login').click()
+    driver = app.session.login()
 
     # 2) прокликивает последовательно все пункты меню слева, включая вложенные пункты
     menu = driver.find_element_by_id('box-apps-menu')
@@ -74,17 +63,20 @@ def test_check_sticker(app):
     box = app.driver.find_element_by_css_selector('#box-most-popular')
     elems = box.find_elements_by_tag_name('li')
     for elem in elems:
-        sticker = elem.find_element_by_class_name('image-wrapper').find_elements_by_class_name('sticker')
+        sticker = elem.find_elements_by_class_name('sticker')
+        # print(len(sticker))
         assert (len(sticker)) == 1
 
     box = app.driver.find_element_by_css_selector('#box-campaigns')
     elems = box.find_elements_by_tag_name('li')
     for elem in elems:
-        sticker = elem.find_element_by_class_name('image-wrapper').find_elements_by_class_name('sticker')
+        sticker = elem.find_elements_by_class_name('sticker')
+        # print(len(sticker))
         assert (len(sticker)) == 1
 
     box = app.driver.find_element_by_css_selector('#box-latest-products')
     elems = box.find_elements_by_tag_name('li')
     for elem in elems:
-        sticker = elem.find_element_by_class_name('image-wrapper').find_elements_by_class_name('sticker')
+        sticker = elem.find_elements_by_class_name('sticker')
+        # print(len(sticker))
         assert (len(sticker)) == 1
