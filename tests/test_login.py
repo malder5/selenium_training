@@ -61,21 +61,23 @@ def test_check_sticker(app):
     app.session.open_home_page()
 
     box = app.driver.find_element_by_css_selector('#box-most-popular')
-    elems = box.find_elements_by_tag_name('li')
+    elems = box.find_elements_by_class_name('product')
+
     for elem in elems:
         sticker = elem.find_elements_by_class_name('sticker')
         # print(len(sticker))
         assert (len(sticker)) == 1
 
     box = app.driver.find_element_by_css_selector('#box-campaigns')
-    elems = box.find_elements_by_tag_name('li')
+    elems = box.find_elements_by_class_name('product')
+
     for elem in elems:
         sticker = elem.find_elements_by_class_name('sticker')
         # print(len(sticker))
         assert (len(sticker)) == 1
 
     box = app.driver.find_element_by_css_selector('#box-latest-products')
-    elems = box.find_elements_by_tag_name('li')
+    elems = box.find_elements_by_class_name('product')
     for elem in elems:
         sticker = elem.find_elements_by_class_name('sticker')
         # print(len(sticker))
