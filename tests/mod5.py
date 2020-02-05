@@ -1,6 +1,6 @@
 # Добавить обёртку к логину админа
 # Убрать драйвера в PATH. Перенести драйвера в папку TOOLS
-# import time
+import time
 
 
 def test_geo_zone(app):
@@ -117,4 +117,102 @@ def test_countries(app):
 
             # Нажать на кнопку.
             button_click(app, 'Cancel')
+
+def test_campaigns(app):
+    '''
+    Более точно, нужно открыть главную страницу, выбрать первый товар в блоке Campaigns и проверить следующее:
+    
+    +) на главной странице и на странице товара совпадает текст названия товара
+    +) на главной странице и на странице товара совпадают цены (обычная и акционная)
+    +) обычная цена 
+        [+] зачёркнутая и    
+        [+] серая (можно считать, что "серый" цвет это такой, у которого в RGBa представлении одинаковые значения для каналов R, G и B)
+    +) акционная 
+        [+] жирная и 
+        [+] красная (можно считать, что "красный" цвет это такой, у которого в RGBa представлении каналы G и B имеют нулевые значения)
+    (цвета надо проверить на каждой странице независимо, при этом цвета на разных страницах могут не совпадать)
+    +) акционная цена крупнее, чем обычная (это тоже надо проверить на каждой странице независимо)
+    '''
+    app.session.open_home_page()
+    app.driver.find_element_by_id("box-campaigns")
+    # собираем карточки продукта
+    elems = app.driver.find_element_by_id("box-campaigns").find_elements_by_class_name('product')
+    page = {}
+    for elem in elems:
+        # Есть ли вообще цены
+        assert elem.find_elements_by_class_name('regular-price') != []
+        assert elem.find_elements_by_class_name('campaign-price') != []
+
+        # Имя
+        page['name'] = elem.find_element_by_class_name('name').text
+        # Цена
+        page['price'] = elem.find_element_by_class_name('regular-price').text
+        # каталожная цена должна быть серой
+        color = elem.find_element_by_class_name('regular-price').value_of_css_property('color')
+        color = color.replace('rgba(','').replace(')', '').split(',')
+        assert int(color[0])==int(color[1])
+        assert int(color[0])==int(color[2])
+        # Каталожная цена должна быть зачёркнутой
+        data = elem.find_element_by_class_name('regular-price').get_attribute('tagName')
+        assert data == 'S'
+
+
+        # Красная цена
+        page['sale'] = elem.find_element_by_class_name('campaign-price').text
+        # Красная цена должна быть красной
+        color = elem.find_element_by_class_name('campaign-price').value_of_css_property('color')
+        color = color.replace('rgba(','').replace(')', '').split(',')
+        assert int(color[0])!=0
+        assert int(color[1])==0
+        assert int(color[2])==0
+
+        # Красная цена должна быть жирной.
+        data = elem.find_element_by_class_name('campaign-price').get_attribute('tagName')
+        assert data == 'STRONG'
+
+        # проверить размеры цены каталога и красной цены.
+        red_price = elem.find_element_by_class_name('campaign-price').get_attribute('offsetHeight')
+        price = elem.find_element_by_class_name('regular-price').get_attribute('offsetHeight')
+        assert price<red_price
+
+        # Открыть карточку товара
+
+        link = elem.find_element_by_class_name('link')
+        app.driver.execute_script('arguments[0].target = "_blank";', link)
+        link.click()
+        app.driver.switch_to.window(app.driver.window_handles[1])
+
+        page2 = {}
+        # Имя
+        page2['name'] = app.driver.find_element_by_tag_name('h1').text
+        # Цена
+        page2['price'] = app.driver.find_element_by_class_name('regular-price').text
+        # каталожная цена должна быть серой
+        color = app.driver.find_element_by_class_name('regular-price').value_of_css_property('color')
+        color = color.replace('rgba(', '').replace(')', '').split(',')
+        assert int(color[0]) == int(color[1])
+        assert int(color[0]) == int(color[2])
+        # Каталожная цена должна быть зачёркнутой
+        data = app.driver.find_element_by_class_name('regular-price').get_attribute('tagName')
+        assert data == 'S'
+
+        # Красная цена
+        page2['sale'] = app.driver.find_element_by_class_name('campaign-price').text
+        # Красная цена должна быть красной
+        color = app.driver.find_element_by_class_name('campaign-price').value_of_css_property('color')
+        color = color.replace('rgba(', '').replace(')', '').split(',')
+        assert int(color[0]) != 0
+        assert int(color[1]) == 0
+        assert int(color[2]) == 0
+
+        # Красная цена должна быть жирной.
+        data = app.driver.find_element_by_class_name('campaign-price').get_attribute('tagName')
+        assert data == 'STRONG'
+
+        # проверить размеры цены каталога и красной цены.
+        red_price = app.driver.find_element_by_class_name('campaign-price').get_attribute('offsetHeight')
+        price = app.driver.find_element_by_class_name('regular-price').get_attribute('offsetHeight')
+        assert price < red_price
+
+        assert page['name']==page2['name']
 
