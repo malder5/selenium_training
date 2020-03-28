@@ -1,3 +1,6 @@
+from model.users import Users
+from random import randrange
+
 def test_new_user(app):
 
     '''
@@ -20,15 +23,47 @@ def test_new_user(app):
     # открыть поле для новых пользователей.
     app.driver.find_element_by_css_selector('#box-account-login tr:nth-child(5)').click()
     # заполнить поля
+    email = ''
+
+    for index in range (0, 11):
+        email+=str(randrange(0, 9))
+    phone = email
+    email+='@mail.ru'
+
+    app.users.fill_fields(Users(
+        # company='1223',
+        firstname='123',
+        lastname='23',
+        address1='123',
+        postcode='12345',
+        city='123',
+        country_code='United States',
+        # zone_code="Colorado",
+        email=email,
+        phone = phone,
+        password=phone,
+        confirmed_password=phone
+    ))
 
     # нажать на кнопку "создать аккаунт"
+    app.users.create_account()
+
     # нажать логаут
+    app.driver.find_element_by_css_selector('.list-vertical li:nth-child(4) > a').click()
     # залогиниться
+    app.driver.find_element_by_css_selector("input[name='email']").click()
+    app.driver.find_element_by_css_selector("input[name='email']").send_keys(email)
+
+    app.driver.find_element_by_css_selector("input[name='password']").click()
+    app.driver.find_element_by_css_selector("input[name='password']").send_keys(phone)
+
+    app.driver.find_element_by_css_selector("button[name='login']").click()
+
+
     # проверить, что открылась нужная страница
+
     # Ещё раз выход
-
-
-    app.session.login()
+    app.driver.find_element_by_css_selector('.list-vertical li:nth-child(4) > a').click()
 
 
 

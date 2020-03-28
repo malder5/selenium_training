@@ -18,6 +18,7 @@ class Application():
     def __init__(self, browser='chrome'):
         # Libs
         self.pytest = pytest
+        self.Select = Select
         # Browsers
         if browser == 'chrome':
             options = Options()
@@ -42,6 +43,7 @@ class Application():
         self.countries = CoutriesHelper(self)
         self.addnewproduct = AddNewProductHelper(self)
         self.users = UsersHelper(self)
+        self.users.user = UsersHelper(self)
 
     def is_valid(self):
         try:
