@@ -12,4 +12,35 @@ class PageHelper:
         assert h1.is_displayed()==True
         assert h1.text == text
 
+    def select_field_fill(self, id, text):
+        if text != None:
+            driver = self.app.driver
+            driver.find_element_by_css_selector(id).send_keys(text)
+            pass
+
+    def text_field_fill(self, id, text):
+        if text != None:
+            driver = self.app.driver
+        pass
+
+    def textarea_field_fill(self, id, text):
+        if text != None:
+            driver = self.app.driver
+            pass
+
+    def date_field_fill(self, id, text):
+        if text != None:
+            driver = self.app.driver
+            pass
+
+    def tree_field_fill(self, id, text):
+        if text != None:
+            driver = self.app.driver
+            pass
+
+    def boolean_field_fill(self, id, text):
+        if text != None:
+            driver = self.app.driver
+            pass
+
 

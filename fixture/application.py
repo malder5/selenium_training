@@ -11,6 +11,8 @@ from fixture.session import SessionHelper
 from fixture.page import PageHelper
 from fixture.geo_zones import GeoZonesHelper
 from fixture.countries import CoutriesHelper
+from fixture.add_new_product import AddNewProductHelper
+from fixture.users import UsersHelper
 
 class Application():
     def __init__(self, browser='chrome'):
@@ -23,7 +25,7 @@ class Application():
             # options.headless = 'headless'
             # options.add_argument('--window-size=1920x1080')
             self.driver = webdriver.Chrome(options=options, executable_path=r'C:\Users\Roman\Downloads\chromedriver.exe')
-            self.driver.implicitly_wait(10)
+            self.driver.implicitly_wait(15)
             # print(self.driver.capabilities)
         elif browser == 'ie':
             self.driver = webdriver.Ie(executable_path=r'C:\Users\Roman\Downloads\IEDriverServer.exe')
@@ -38,6 +40,8 @@ class Application():
         self.page = PageHelper(self)
         self.geozones = GeoZonesHelper(self)
         self.countries = CoutriesHelper(self)
+        self.addnewproduct = AddNewProductHelper(self)
+        self.users = UsersHelper(self)
 
     def is_valid(self):
         try:
