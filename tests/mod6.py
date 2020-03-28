@@ -1,5 +1,7 @@
 from model.users import Users
+from model.add_new_product import AddNewProduct
 from random import randrange
+import time
 
 def test_new_user(app):
 
@@ -65,35 +67,71 @@ def test_new_user(app):
     # Ещё раз выход
     app.driver.find_element_by_css_selector('.list-vertical li:nth-child(4) > a').click()
 
-
-
-
 def test_add_product(app):
-    '''
-    Сделайте сценарий для добавления нового товара (продукта) в учебном приложении litecart (в админке).
-    Для добавления товара нужно открыть меню Catalog, в правом верхнем углу нажать кнопку "Add New Product",
-    заполнить поля с информацией о товаре и сохранить.
-    Достаточно заполнить только информацию на вкладках General, Information и Prices. Скидки (Campains) на
-    вкладке Prices можно не добавлять.
-    Переключение между вкладками происходит не мгновенно, поэтому после переключения можно сделать небольшую
-    паузу (о том, как делать более правильные ожидания, будет рассказано в следующих занятиях).
-    Картинку с изображением товара нужно уложить в репозиторий вместе с кодом. При этом указывать в коде
-    полный абсолютный путь к файлу плохо, на другой машине работать не будет. Надо средствами языка программирования
-    преобразовать относительный путь в абсолютный.
-    '''
 
     app.session.login()
-
+    time.sleep(2)
     # Открыть каталог
-    # app.page.open_menu('Catalog')
+
+    app.page.open_menu('Catalog')
     # нажать на кнопку "новый продукт"
     # app.click_button(app, 'Add New Product')
+    text_button = 'Add New Product'
 
-    app.addnewproduct.open_page()
+    elems = app.driver.find_elements_by_css_selector('a.button')
+    for elem in elems:
+        if text_button in elem.text:
+            elem.click()
+            time.sleep(2)
+    assert app.driver.find_element_by_css_selector('h1').text == 'Add New Product'
+
     # Вкладка General
-    # Вкладка Information
-    # Вкладка Prices
+    app.new_product.fill_fields(AddNewProduct(
+        status='Enabled',
+        name='123',
+        code = '123',
+        categories='Subcategory',
+        default_category='Subcategory',
+        product_groups='Male',
+        upload_images=None,
+        date_valid_form=None,
+        date_valid_to=None
+        ))
 
+    # app.addnewproduct(AddNewProduct(
+    #     status='Enable
+    #     ))d',
+    #     # name=None,
+    #     # code=None,
+    #     # categories=None,
+    #     # default_category=None,
+    #     # product_groups=None,
+    #     # quantity=None,
+    #     # quantity_unit=None,
+    #     # delivery_status=None,
+    #     # sold_out_status=None,
+    #     # upload_images=None,
+    #     # date_valid_form=None,
+    #     # date_valid_to=None,
+    # ))
+
+    # Вкладка Information
+    # app.addnewproduct(AddNewProduct(
+    #     manufacturer_id=None,
+    #     supplier_id=None,
+    #     keywords=None,
+    #     short_description=None,
+    #     description=None,
+    # ))
+    # Вкладка Prices
+    # app.addnewproduct(AddNewProduct(
+    #     purchase_price=None,
+    #     purchase_price_currency_code=None,
+    #     tax_class_id=None,
+    #     pricesUSD=None,
+    #     gross_pricesUSD=None,
+    #     pricesEUR=None,
+    #     gross_pricesEUR=None
+    # ))
     # Добавить картинку
     # Проверить, что добавилось в админке.
-    pass

@@ -12,6 +12,7 @@ from fixture.page import PageHelper
 from fixture.geo_zones import GeoZonesHelper
 from fixture.countries import CoutriesHelper
 from fixture.add_new_product import AddNewProductHelper
+from fixture.new_product import new_product
 from fixture.users import UsersHelper
 
 class Application():
@@ -42,6 +43,7 @@ class Application():
         self.geozones = GeoZonesHelper(self)
         self.countries = CoutriesHelper(self)
         self.addnewproduct = AddNewProductHelper(self)
+        self.new_product = new_product(self)
         self.users = UsersHelper(self)
         self.users.user = UsersHelper(self)
 
